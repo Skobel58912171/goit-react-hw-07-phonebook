@@ -3,15 +3,15 @@ import * as yup from 'yup';
 import styled from 'styled-components';
 import { Btn, Label, InputForm, FormData } from './FormContacts.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
+import { addContact } from 'redux/operations';
 import { getContacts } from 'redux/selector';
 
 const schema = yup.object().shape({
   name: yup.string().required(),
-  number: yup.string().min(9).max(9).required(),
+  phone: yup.string().min(9).max(12).required(),
 });
 
-const initialValues = { name: '', number: '' };
+const initialValues = { name: '', phone: '' };
 
 export const ErrorText = styled.p`
   font: 0.6em 'typewriter', sans-serif;
@@ -34,6 +34,8 @@ export const FormContacts = () => {
   const allContacts = useSelector(getContacts);
 
   const handleSubmit = (contact, { resetForm }) => {
+    // e.preventDefault();
+
     if (allContacts.some(item => item.name === contact.name)) {
       alert(`Contact ${contact.name} already exist`);
       return;
@@ -58,8 +60,8 @@ export const FormContacts = () => {
         <Label>
           Number
           <br />
-          <InputForm type="tel" name="number" placeholder="345-45-45" />
-          <FormError name="number" component="div" />
+          <InputForm type="tel" name="phone" placeholder="345-45-45" />
+          <FormError name="phone" component="div" />
         </Label>
         <Btn type="submit">Add contact</Btn>
       </FormData>

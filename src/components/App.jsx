@@ -1,8 +1,23 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchContacts } from '../redux/operations';
+import { getIsLoading, getError } from '../redux/selector';
 import { FormContacts } from './FormContacts/FormContacts';
 import InputFilter from './InputFilter/InputFilter';
 import ListContacts from './ListContacts/ListContacts';
+import { Loader } from './Loader';
 
 export const App = () => {
+  const dispatch = useDispatch();
+
+  const isLoading = useSelector(getIsLoading);
+
+  const error = useSelector(getError);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
     <div
       style={{
@@ -21,7 +36,8 @@ export const App = () => {
       <FormContacts />
       <h2>Contacts</h2>
       <InputFilter />
-
+      {isLoading && <Loader />}
+      {error && <b>Something went wrong, please reload the page</b>}
       <ListContacts />
     </div>
   );
